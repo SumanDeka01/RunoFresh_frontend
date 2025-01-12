@@ -1,203 +1,72 @@
-import React, { useState } from 'react';
-import { ShoppingCart, User, Menu, Search, X } from 'lucide-react';
-
-const defaultProducts = [
-  {
-    id: 1,
-    name: 'Organic Chicken ',
-    category: 'Poultry',
-    price: 300,
-    image: '/Images/chicken.png',
-    description: 'Fresh, hormone-free chicken breast'
-  },
-  {
-    id: 2,
-    name: 'Duck ',
-    category: 'Poultry',
-    price: 650,
-    image: '/Images/Duck.png',
-    description: 'Premium quality duck breast'
-  },
-  {
-    id: 3,
-    name: 'Pork',
-    category: 'Poultry',
-    price: 420,
-    image: '/Images/pork.png',
-    description: 'Fresh local Pork'
-  },
-  {
-    id: 4,
-    name: 'Sichuan Sauce',
-    category: 'Sauces',
-    price: 100,
-    image: '/api/placeholder/200/200',
-    description: 'Authentic Sichuan sauce'
-  },
-  {
-    id: 5,
-    name: 'Vegetable Momos',
-    category: 'Momos',
-    price: 100,
-    image: '/Images/Momo.png',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Broiler',
-    category: 'Poultry',
-    price: 300,
-    image: '/api/placeholder/200/200',
-    description: 'Fresh chicken broiler'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Poultry',
-    price: 800,
-    image: '/Images/Mutton.png',
-    description: 'Good grade mutton'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  },
-  {
-    id: 6,
-    name: 'Mutton',
-    category: 'Momos',
-    price: 8.99,
-    image: '/api/placeholder/200/200',
-    description: 'Traditional vegetable dumplings'
-  }
-];
+import { useEffect, useState } from "react";
+import { ShoppingCart, User, Menu, Search, X } from "lucide-react";
+import axios from "axios";
 
 const RunoFresh = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cart, setCart] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [products] = useState(defaultProducts);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
 
-  const categories = ['All', 'Poultry', 'Seafood', 'Sauces', 'Momos', 'Fish'];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await axios.get("http://localhost:3001/items", {
+        withCredentials: true,
+      });
+      console.log(response.data);
+      setProducts(response.data.items);
+    };
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+    const fetchCategories = async () => {
+      const response = await axios.get("http://localhost:3001/categories", {
+        withCredentials: true,
+      });
+
+      console.log(response.data);
+      setCategories(response.data.categories);
+    };
+
+    fetchProducts();
+    fetchCategories();
+  }, []);
+  // console.log(products);
+
+  useEffect(() => {
+    const fetchItemsByCategory = async () => {
+      const response = await axios.get(
+        `http://localhost:3001/items/category/${selectedCategory}`,
+        { withCredentials: true }
+      );
+      setProducts(response.data.items);
+    };
+    fetchItemsByCategory();
+  }, [selectedCategory]);
+
+  // const categories = ["All", "Poultry", "Seafood", "Sauces", "Momos", "Fish"];
+
+  // const filteredProducts = products.filter((product) => {
+  //   const matchesSearch = product.name
+  //     .toLowerCase()
+  //     .includes(searchQuery.toLowerCase());
+  //   const matchesCategory = product.category_id === selectedCategory;
+  //   return matchesSearch && matchesCategory;
+  // });
 
   const addToCart = (product) => {
     setCart([...cart, { ...product, quantity: 1 }]);
   };
 
   const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
+    setCart(cart.filter((item) => item.id !== productId));
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    return cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
   };
 
   return (
@@ -253,32 +122,31 @@ const RunoFresh = () => {
       </header>
 
       {/* Hero Section */}
-      
-      <section className="relative bg-green-500">
-  <div className="max-w-7xl mx-auto px-4 py-20 flex flex-col lg:flex-row items-center justify-between">
-    <div className="text-center lg:text-left lg:max-w-lg">
-      <h1 className="text-4xl lg:text-6xl font-bold mb-4">
-        Fresh & Organic Foods
-      </h1>
-      <p className="text-lg mb-6">
-        Discover the best selection of fresh, organic, and premium-quality
-        products delivered to your doorstep.
-      </p>
-      <button
-        className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-100"
-        aria-label="Shop now"
-      >
-        Shop Now
-      </button>
-    </div>
-    <img
-      src="Images\RunoHero.png"
-      alt="Fresh produce"
-      className="w-full lg:w-1/2 mt-8 lg:mt-0 rounded-lg shadow-lg"
-    />
-  </div>
-</section>
 
+      <section className="relative bg-green-500">
+        <div className="max-w-7xl mx-auto px-4 py-20 flex flex-col lg:flex-row items-center justify-between">
+          <div className="text-center lg:text-left lg:max-w-lg">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-4">
+              Fresh & Organic Foods
+            </h1>
+            <p className="text-lg mb-6">
+              Discover the best selection of fresh, organic, and premium-quality
+              products delivered to your doorstep.
+            </p>
+            <button
+              className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-100"
+              aria-label="Shop now"
+            >
+              Shop Now
+            </button>
+          </div>
+          <img
+            src="Images\RunoHero.png"
+            alt="Fresh produce"
+            className="w-full lg:w-1/2 mt-8 lg:mt-0 rounded-lg shadow-lg"
+          />
+        </div>
+      </section>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -288,16 +156,16 @@ const RunoFresh = () => {
           <div className="flex space-x-4 overflow-x-auto pb-2">
             {categories.map((category) => (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
                 className={`px-4 py-2 rounded-md ${
-                  selectedCategory === category
-                    ? 'bg-green-600 text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-100'
+                  selectedCategory === category.name
+                    ? "bg-green-600 text-white"
+                    : "bg-white text-gray-600 hover:bg-gray-100"
                 }`}
-                aria-label={`Filter by ${category}`}
+                aria-label={`Filter by ${category.name}`}
               >
-                {category}
+                {category.name}
               </button>
             ))}
           </div>
@@ -305,18 +173,18 @@ const RunoFresh = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
               role="article"
               aria-label={product.name}
             >
-              <img
+              {/* <img
                 src={product.image}
                 alt={product.name}
                 className="w-full h-48 object-cover"
-              />
+              /> */}
               <div className="p-4">
                 <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
                 <p className="text-gray-600 mb-4">{product.description}</p>
