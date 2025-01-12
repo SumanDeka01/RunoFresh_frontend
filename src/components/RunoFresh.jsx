@@ -45,16 +45,6 @@ const RunoFresh = () => {
     fetchItemsByCategory();
   }, [selectedCategory]);
 
-  // const categories = ["All", "Poultry", "Seafood", "Sauces", "Momos", "Fish"];
-
-  // const filteredProducts = products.filter((product) => {
-  //   const matchesSearch = product.name
-  //     .toLowerCase()
-  //     .includes(searchQuery.toLowerCase());
-  //   const matchesCategory = product.category_id === selectedCategory;
-  //   return matchesSearch && matchesCategory;
-  // });
-
   const addToCart = (product) => {
     setCart([...cart, { ...product, quantity: 1 }]);
   };
