@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { ShoppingCart, User, Menu, Search, X } from "lucide-react";
+import { ShoppingCart, Menu, Search, X } from "lucide-react";
 import axios from "axios";
+import PaymentButtonRuno from "./PaymentButtonRuno";
+import GoogleLogin from "./GoogleLogin";
 
 const RunoFresh = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -105,7 +107,7 @@ const RunoFresh = () => {
               className="p-2 rounded-md hover:bg-gray-100"
               aria-label="User account"
             >
-              <User className="h-6 w-6" />
+              <GoogleLogin />
             </button>
           </div>
         </div>
@@ -238,12 +240,8 @@ const RunoFresh = () => {
                     <span>Total:</span>
                     <span>${calculateTotal()}</span>
                   </div>
-                  <button
-                    className="w-full mt-4 bg-green-600 text-white py-2 rounded-md hover:bg-green-700"
-                    aria-label="Proceed to checkout"
-                  >
-                    Checkout
-                  </button>
+
+                  <PaymentButtonRuno />
                 </div>
               )}
             </div>
