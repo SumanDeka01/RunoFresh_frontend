@@ -25,10 +25,9 @@ const GoogleAuth = () => {
     <div>
       <button
         onClick={googleLogin}
-        className="border-slate-400 bg-slate-200 border-2 rounded-lg py-2 px-4"
+        className="w-full bg-green-600 text-white py-2 rounded-full hover:bg-green-700 px-4"
       >
-        {/* <img src={"/google.svg"} alt="google" width={30} height={30} /> */}
-        Login with Google
+        Login
       </button>
     </div>
   );

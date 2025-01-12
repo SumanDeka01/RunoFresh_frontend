@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShoppingCart, Menu, Search, X } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import axios from "axios";
 import PaymentButtonRuno from "./PaymentButtonRuno";
 import GoogleLogin from "./GoogleLogin";
@@ -8,7 +8,6 @@ const RunoFresh = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cart, setCart] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -78,7 +77,7 @@ const RunoFresh = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="relative">
+            {/* <div className="relative">
               <input
                 type="search"
                 placeholder="Search products..."
@@ -88,7 +87,7 @@ const RunoFresh = () => {
                 aria-label="Search products"
               />
               <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
+            </div> */}
 
             <button
               onClick={() => setIsCartOpen(true)}
@@ -172,11 +171,11 @@ const RunoFresh = () => {
               role="article"
               aria-label={product.name}
             >
-              {/* <img
-                src={product.image}
+              <img
+                src={product.img}
                 alt={product.name}
                 className="w-full h-48 object-cover"
-              /> */}
+              />
               <div className="p-4">
                 <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
                 <p className="text-gray-600 mb-4">{product.description}</p>
